@@ -31,6 +31,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite, Category = "BCT")
 	int Result;
 
+	// Initial test loops for simple addition calculation 
 	UFUNCTION(BlueprintCallable)
 	void StartTestIterations(int InLastIndex);
 	UFUNCTION(BlueprintCallable)
@@ -39,6 +40,5 @@ protected:
 	void StartTestIterationsPlusPlus(int InLastIndex);
 	UFUNCTION(BlueprintCallable)
 	void StartSecondLoopPlusPlus(int InLastIndex);
-	UFUNCTION(BlueprintCallable)
-	void StartTestIterationsBranch(int InLastIndex);
+
 };

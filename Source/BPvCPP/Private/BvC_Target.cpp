@@ -16,6 +16,7 @@ ABvC_Target::ABvC_Target()
 
 }
 
+//Starting loop for += using the BP version of addition
 void ABvC_Target::StartTestIterations(int InLastIndex)
 {
 	for (int i = 1; i <= InLastIndex; i++)
@@ -23,17 +24,16 @@ void ABvC_Target::StartTestIterations(int InLastIndex)
 		 StartSecondLoop(i);
 	}
 }
-
+//Second loop for += using the BP version of addition
 void ABvC_Target::StartSecondLoop(int InLastIndex)
 {
 	for (int i = 1; i <= InLastIndex; i++)
 	{
 		Result = UKismetMathLibrary::Add_IntInt(Result, 1);
-		//Result = Result + 1;
 	}
-
 }
 
+//Starting loop for using the increment version of addition
 void ABvC_Target::StartTestIterationsPlusPlus(int InLastIndex)
 {
 	for (int i = 1; i <= InLastIndex; i++)
@@ -41,27 +41,11 @@ void ABvC_Target::StartTestIterationsPlusPlus(int InLastIndex)
 		StartSecondLoop(i);
 	}
 }
-
+//Second loop for using the increment version of addition
 void ABvC_Target::StartSecondLoopPlusPlus(int InLastIndex)
 {
 	for (int i = 1; i <= InLastIndex; i++)
 	{
 		Result++;
-	}
-
-}
-
-void ABvC_Target::StartTestIterationsBranch(int InLastIndex)
-{
-	for (int i = 1; i <= InLastIndex; i++)
-	{
-		for (int j = 1; j <= i; j++)
-		{
-			if(true)
-			{
-				Result = UKismetMathLibrary::Add_IntInt(Result, 1);
-				//Result = Result + 1;
-			}
-		}
 	}
 }

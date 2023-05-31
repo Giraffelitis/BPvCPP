@@ -20,7 +20,7 @@ public:
 
 protected:
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* Mesh;
 	UPROPERTY(EditAnywhere)
 	USphereComponent* SphereComp;

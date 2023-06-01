@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "BvC_Target.generated.h"
 
+class UTextRenderComponent;
 class USphereComponent;
 
 UCLASS()
@@ -19,19 +19,48 @@ public:
 	ABvC_Target();
 
 protected:
+
+	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* Mesh;
 	UPROPERTY(EditAnywhere)
 	USphereComponent* SphereComp;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BCT")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTextRenderComponent* MethodTextRender;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTextRenderComponent* IterationsTextRender;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTextRenderComponent* TimeTextRender;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTextRenderComponent* CalculationsTextRender;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
 	int NumOfIterations;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BCT")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
 	int TestID;
-	UPROPERTY(BlueprintReadWrite, Category = "BCT")
-	int Result;
-
-	// Initial test loops for simple addition calculation 
+	UPROPERTY(BlueprintReadWrite, Category = "BvC")
+	int NumOfCalculations;
+	UPROPERTY(BlueprintReadWrite, Category = "BvC")
+	double StartTime;
+	UPROPERTY(BlueprintReadWrite, Category = "BvC")
+	double TimeElapsed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
+	FText MethodText;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
+	FText IterationsText;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
+	FText ElapsedTimeText;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
+	FText TotalCalculationsText;
+	
+	// Initial test loops for simple addition calculation
+	UFUNCTION(BlueprintCallable)
+	void SetStartTime();
+	UFUNCTION(BlueprintCallable)
+	void CalculateElapsedTime();
+	UFUNCTION(BlueprintCallable)
+	void CollectResults();
 	UFUNCTION(BlueprintCallable)
 	void StartTestIterations(int InLastIndex);
 	UFUNCTION(BlueprintCallable)

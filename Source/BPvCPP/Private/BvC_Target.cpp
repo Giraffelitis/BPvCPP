@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Runtime/Core/Public/GenericPlatform/GenericPlatformTime.h"
 
 // Sets default values
 ABvC_Target::ABvC_Target()
@@ -35,12 +36,23 @@ void ABvC_Target::BeginPlay()
 
 void ABvC_Target::SetStartTime()
 {
-	StartTime = FPlatformTime::Seconds();
+	StartTime = FGenericPlatformTime::ToMilliseconds64(FPlatformTime::Cycles64());
 }
 
 void ABvC_Target::CalculateElapsedTime()
 {
-	TimeElapsed =  FPlatformTime::Seconds() - StartTime;
+	TimeElapsed = FGenericPlatformTime::ToMilliseconds64(FPlatformTime::Cycles64()) - StartTime;
+	TimeElapsed = SetDecimalPlaces(TimeElapsed, 10, 2);
+}
+
+double ABvC_Target::SetDecimalPlaces(double InTimeElapsed, int AccuracyLowerLimit, int DecimalPlaces)
+{
+	if (InTimeElapsed >= AccuracyLowerLimit)
+	{
+		InTimeElapsed = ceil(InTimeElapsed * 100)/100;
+		return InTimeElapsed;
+	}	
+		return InTimeElapsed;	
 }
 
 //Collect results and update TextRenderComponents
@@ -50,6 +62,9 @@ void ABvC_Target::CollectResults()
 	CalculationsTextRender->SetText(TotalCalculationsText);
 	
 	FString TempString = FString::SanitizeFloat(TimeElapsed);
+	// Run significant figure conversion
+	
+	TempString.Append("ms");
 	ElapsedTimeText = FText::FromString(TempString);
 	TimeTextRender->SetText(ElapsedTimeText);
 		

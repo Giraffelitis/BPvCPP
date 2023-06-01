@@ -43,6 +43,8 @@ protected:
 	int NumOfCalculations;
 	UPROPERTY(BlueprintReadWrite, Category = "BvC")
 	double StartTime;
+
+	//*** TODO: Change time elapsed to float to test
 	UPROPERTY(BlueprintReadWrite, Category = "BvC")
 	double TimeElapsed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
@@ -60,6 +62,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void CalculateElapsedTime();
 	UFUNCTION(BlueprintCallable)
+	double SetDecimalPlaces(double InTimeElapsed, int AccuracyLowerLimit, int DecimalPlaces);
+	UFUNCTION(BlueprintCallable)
 	void CollectResults();
 	UFUNCTION(BlueprintCallable)
 	void StartTestIterations(int InLastIndex);
@@ -69,5 +73,5 @@ protected:
 	void StartTestIterationsPlusPlus(int InLastIndex);
 	UFUNCTION(BlueprintCallable)
 	void StartSecondLoopPlusPlus(int InLastIndex);
-
+	
 };

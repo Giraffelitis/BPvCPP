@@ -43,8 +43,6 @@ protected:
 	int NumOfCalculations;
 	UPROPERTY(BlueprintReadWrite, Category = "BvC")
 	double StartTime;
-
-	//*** TODO: Change time elapsed to float to test
 	UPROPERTY(BlueprintReadWrite, Category = "BvC")
 	double TimeElapsed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")

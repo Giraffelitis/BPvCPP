@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "BvC_Target.generated.h"
 
+class UDataTable;
 class UTextRenderComponent;
 class USphereComponent;
 
@@ -26,33 +27,39 @@ protected:
 	UStaticMeshComponent* Mesh;
 	UPROPERTY(EditAnywhere)
 	USphereComponent* SphereComp;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 	UTextRenderComponent* MethodTextRender;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 	UTextRenderComponent* IterationsTextRender;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 	UTextRenderComponent* TimeTextRender;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 	UTextRenderComponent* CalculationsTextRender;
+
+	UDataTable* GetTestTable() { return TestTable; }
+	void SetTestTable(UDataTable* InVal) { TestTable = InVal; }
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "BvC")
+	FName TestID;
+	UPROPERTY(BlueprintReadOnly, Category = "BvC")
 	int NumOfIterations;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
-	int TestID;
 	UPROPERTY(BlueprintReadWrite, Category = "BvC")
 	int NumOfCalculations;
-	UPROPERTY(BlueprintReadWrite, Category = "BvC")
+	UPROPERTY()
 	double StartTime;
-	UPROPERTY(BlueprintReadWrite, Category = "BvC")
+	UPROPERTY()
 	double TimeElapsed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
+	UPROPERTY(BlueprintReadOnly, Category = "BvC")
 	FText MethodText;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
+	UPROPERTY(BlueprintReadOnly, Category = "BvC")
 	FText IterationsText;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
+	UPROPERTY(BlueprintReadOnly, Category = "BvC")
 	FText ElapsedTimeText;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BvC")
+	UPROPERTY(BlueprintReadOnly, Category = "BvC")
 	FText TotalCalculationsText;
+	
+	void SetTestInfoText();	
 	
 	// Initial test loops for simple addition calculation
 	UFUNCTION(BlueprintCallable)
@@ -72,4 +79,8 @@ protected:
 	void CollectResults();
 	UFUNCTION(BlueprintCallable)
 	double SetDecimalPlaces(double InTimeElapsed, int AccuracyLowerLimit, int DecimalPlaces);
+
+private:
+	UPROPERTY()
+	UDataTable* TestTable;
 };

@@ -2,15 +2,16 @@
 
 
 #include "BvC_Target.h"
+
+#include "BvC_DataTypes.h"
 #include "Components/SphereComponent.h"
 #include "Components/TextRenderComponent.h"
-#include "Kismet/KismetMathLibrary.h"
+#include "Engine/DataTable.h"
 #include "Runtime/Core/Public/GenericPlatform/GenericPlatformTime.h"
 
 // Sets default values
 ABvC_Target::ABvC_Target()
 {
-
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	RootComponent = Mesh;
 	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComp");
@@ -24,14 +25,29 @@ ABvC_Target::ABvC_Target()
 	TimeTextRender->SetupAttachment(Mesh);
 	CalculationsTextRender = CreateDefaultSubobject<UTextRenderComponent>("Calculations Text");
 	CalculationsTextRender->SetupAttachment(Mesh);
+
+	//Gets the DT Blueprint
+	static ConstructorHelpers::FObjectFinder<UDataTable>
+	TestTable_BP(TEXT("DataTable'/Game/TestingHub/Data/DT_PerformanceTestList'"));
+
+	SetTestTable(TestTable_BP.Object);
 }
 
 void ABvC_Target::BeginPlay()
 {
 	Super::BeginPlay();
 
-	MethodTextRender->SetText(MethodText);
-	IterationsTextRender->SetText(IterationsText);
+	GetTestTable();
+	SetTestInfoText();
+}
+
+void ABvC_Target::SetTestInfoText()
+{
+	if(TestID == "None") return;
+	FPerformanceTestList* TestData = TestTable->FindRow<FPerformanceTestList>(TestID,"");
+	MethodTextRender->SetText(TestData->TestingMethod);
+	NumOfIterations = TestData->NumOfTestIterations;
+	IterationsTextRender->SetText(FText::AsNumber(NumOfIterations));	
 }
 
 //Gets performance test start time
@@ -59,7 +75,7 @@ void ABvC_Target::CollectResults()
 	ElapsedTimeText = FText::FromString(TempString);
 	TimeTextRender->SetText(ElapsedTimeText);
 		
-	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC TestID: %d"), TestID);
+	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC TestID: %s"), *TestID.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC Number of Planned Iterations: %d"), NumOfIterations);
 	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC Total Number of Calculations: %d"), NumOfCalculations);
 	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC Elapsed Time: %f"), TimeElapsed);

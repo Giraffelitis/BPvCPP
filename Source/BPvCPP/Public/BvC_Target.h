@@ -56,14 +56,6 @@ protected:
 	
 	// Initial test loops for simple addition calculation
 	UFUNCTION(BlueprintCallable)
-	void SetStartTime();
-	UFUNCTION(BlueprintCallable)
-	void CalculateElapsedTime();
-	UFUNCTION(BlueprintCallable)
-	double SetDecimalPlaces(double InTimeElapsed, int AccuracyLowerLimit, int DecimalPlaces);
-	UFUNCTION(BlueprintCallable)
-	void CollectResults();
-	UFUNCTION(BlueprintCallable)
 	void StartTestIterations(int InLastIndex);
 	UFUNCTION(BlueprintCallable)
 	void StartSecondLoop(int InLastIndex);	
@@ -72,4 +64,12 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void StartSecondLoopPlusPlus(int InLastIndex);
 	
+	UFUNCTION(BlueprintCallable)
+	void SetStartTime();
+	UFUNCTION(BlueprintCallable)
+	void CalculateElapsedTime();
+	UFUNCTION(BlueprintCallable)
+	void CollectResults();
+	UFUNCTION(BlueprintCallable)
+	double SetDecimalPlaces(double InTimeElapsed, int AccuracyLowerLimit, int DecimalPlaces);
 };

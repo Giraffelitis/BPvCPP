@@ -34,25 +34,15 @@ void ABvC_Target::BeginPlay()
 	IterationsTextRender->SetText(IterationsText);
 }
 
+//Gets performance test start time
 void ABvC_Target::SetStartTime()
 {
 	StartTime = FGenericPlatformTime::ToMilliseconds64(FPlatformTime::Cycles64());
 }
-
+//Calculates the duration of the performance test
 void ABvC_Target::CalculateElapsedTime()
 {
 	TimeElapsed = FGenericPlatformTime::ToMilliseconds64(FPlatformTime::Cycles64()) - StartTime;
-	TimeElapsed = SetDecimalPlaces(TimeElapsed, 10, 2);
-}
-
-double ABvC_Target::SetDecimalPlaces(double InTimeElapsed, int AccuracyLowerLimit, int DecimalPlaces)
-{
-	if (InTimeElapsed >= AccuracyLowerLimit)
-	{
-		InTimeElapsed = ceil(InTimeElapsed * 100)/100;
-		return InTimeElapsed;
-	}	
-		return InTimeElapsed;	
 }
 
 //Collect results and update TextRenderComponents
@@ -60,7 +50,8 @@ void ABvC_Target::CollectResults()
 {
 	TotalCalculationsText = FText::AsNumber(NumOfCalculations);
 	CalculationsTextRender->SetText(TotalCalculationsText);
-	
+
+	TimeElapsed = SetDecimalPlaces(TimeElapsed, 10, 2);
 	FString TempString = FString::SanitizeFloat(TimeElapsed);
 	// Run significant figure conversion
 	
@@ -74,6 +65,16 @@ void ABvC_Target::CollectResults()
 	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC Elapsed Time: %f"), TimeElapsed);
 }
 
+double ABvC_Target::SetDecimalPlaces(double InTimeElapsed, int AccuracyLowerLimit, int DecimalPlaces)
+{
+	if (InTimeElapsed >= AccuracyLowerLimit)
+	{
+		InTimeElapsed = ceil(InTimeElapsed * 100)/100;
+		return InTimeElapsed;
+	}	
+	return InTimeElapsed;	
+}
+
 //Starting loop for += using the BP version of addition
 void ABvC_Target::StartTestIterations(int InLastIndex)
 {
@@ -82,12 +83,13 @@ void ABvC_Target::StartTestIterations(int InLastIndex)
 		 StartSecondLoop(i);
 	}
 }
+
 //Second loop for += using the BP version of addition
 void ABvC_Target::StartSecondLoop(int InLastIndex)
 {
 	for (int i = 1; i <= InLastIndex; i++)
 	{
-		NumOfCalculations = UKismetMathLibrary::Add_IntInt(NumOfCalculations, 1);
+		NumOfCalculations += 1;
 	}
 }
 
@@ -96,9 +98,10 @@ void ABvC_Target::StartTestIterationsPlusPlus(int InLastIndex)
 {
 	for (int i = 1; i <= InLastIndex; i++)
 	{
-		StartSecondLoop(i);
+		StartSecondLoopPlusPlus(i);
 	}
 }
+
 //Second loop for using the increment version of addition
 void ABvC_Target::StartSecondLoopPlusPlus(int InLastIndex)
 {

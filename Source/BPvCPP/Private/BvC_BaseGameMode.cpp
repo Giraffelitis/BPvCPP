@@ -43,7 +43,7 @@ void ABvC_BaseGameMode::UpdateTestTable()
 	TArray<FString> stringArray ;
 	ResponseString.ParseIntoArray(stringArray, TEXT("\r\n"), false);
 	
-	for (int i = 1; i < 1; i++)
+	for (int i = 1; i < stringArray.Num(); i++)
 	{
 		if (stringArray.Num() == 0){continue;}
 		FString LineLabel = stringArray[0];
@@ -55,9 +55,8 @@ void ABvC_BaseGameMode::UpdateTestTable()
 		Row.NumOfTestIterations = FCString::Atoi(*stringArray[2]);
 
 		// add the row to the table
-		TestTable->AddRow(FName(*stringArray[0]), Row);
+		TestTable->AddRow(FName(*stringArray[i]), Row);
 	}
-	
 }
 
 void ABvC_BaseGameMode::RetrieveTestTableData()

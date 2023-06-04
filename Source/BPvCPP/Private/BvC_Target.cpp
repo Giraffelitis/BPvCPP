@@ -47,7 +47,7 @@ void ABvC_Target::SetTestInfoText()
 	
 	MethodTextRender->SetText(TestData->TestingMethod);
 	NumOfIterations = TestData->NumOfTestIterations;
-	IterationsTextRender->SetText(FText::AsNumber(NumOfIterations));	
+	IterationsTextRender->SetText(FText::AsNumber(NumOfIterations));
 }
 
 //Gets performance test start time

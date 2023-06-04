@@ -3,10 +3,10 @@
 
 #include "BvC_Target.h"
 
+#include "BvC_BaseGameMode.h"
 #include "BvC_DataTypes.h"
 #include "Components/SphereComponent.h"
 #include "Components/TextRenderComponent.h"
-#include "Engine/DataTable.h"
 #include "Runtime/Core/Public/GenericPlatform/GenericPlatformTime.h"
 
 // Sets default values
@@ -26,25 +26,25 @@ ABvC_Target::ABvC_Target()
 	CalculationsTextRender = CreateDefaultSubobject<UTextRenderComponent>("Calculations Text");
 	CalculationsTextRender->SetupAttachment(Mesh);
 
-	//Gets the DT Blueprint
-	static ConstructorHelpers::FObjectFinder<UDataTable>
-	TestTable_BP(TEXT("DataTable'/Game/TestingHub/Data/DT_PerformanceTestList'"));
-
-	SetTestTable(TestTable_BP.Object);
+	TestID = "None";
 }
 
 void ABvC_Target::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetTestTable();
+	BvCGameMode = Cast<ABvC_BaseGameMode>(GetWorld()->GetAuthGameMode());
+	if(!IsValid(BvCGameMode)) return;
+
 	SetTestInfoText();
 }
 
 void ABvC_Target::SetTestInfoText()
 {
-	if(TestID == "None") return;
+	TestTable = BvCGameMode->GetTestTable();
 	FPerformanceTestList* TestData = TestTable->FindRow<FPerformanceTestList>(TestID,"");
+	if(TestTable->GetRowMap().IsEmpty()) return;
+	
 	MethodTextRender->SetText(TestData->TestingMethod);
 	NumOfIterations = TestData->NumOfTestIterations;
 	IterationsTextRender->SetText(FText::AsNumber(NumOfIterations));	
@@ -55,6 +55,7 @@ void ABvC_Target::SetStartTime()
 {
 	StartTime = FGenericPlatformTime::ToMilliseconds64(FPlatformTime::Cycles64());
 }
+
 //Calculates the duration of the performance test
 void ABvC_Target::CalculateElapsedTime()
 {

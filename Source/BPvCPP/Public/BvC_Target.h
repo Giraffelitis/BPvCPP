@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BvC_BaseGameMode.h"
 #include "GameFramework/Actor.h"
 #include "BvC_Target.generated.h"
 
-class UDataTable;
 class UTextRenderComponent;
 class USphereComponent;
 
@@ -18,6 +18,8 @@ class BPVCPP_API ABvC_Target : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ABvC_Target();
+
+	void SetTestInfoText();	
 
 protected:
 
@@ -36,9 +38,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UTextRenderComponent* CalculationsTextRender;
 
-	UDataTable* GetTestTable() { return TestTable; }
-	void SetTestTable(UDataTable* InVal) { TestTable = InVal; }
-	
+	UPROPERTY()
+	ABvC_BaseGameMode* BvCGameMode;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "BvC")
 	FName TestID;
@@ -58,8 +59,6 @@ protected:
 	FText ElapsedTimeText;
 	UPROPERTY(BlueprintReadOnly, Category = "BvC")
 	FText TotalCalculationsText;
-	
-	void SetTestInfoText();	
 	
 	// Initial test loops for simple addition calculation
 	UFUNCTION(BlueprintCallable)
@@ -83,4 +82,5 @@ protected:
 private:
 	UPROPERTY()
 	UDataTable* TestTable;
+	
 };

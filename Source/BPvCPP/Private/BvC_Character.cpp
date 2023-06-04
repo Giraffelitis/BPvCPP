@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BvC_Character.h"
+
+#include "BvC_BaseGameMode.h"
 #include "BvC_Projectile.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
@@ -50,11 +52,9 @@ void ABvC_Character::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
-
 void ABvC_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -69,9 +69,11 @@ void ABvC_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABvC_Character::Look);
+
+		//UpdateTests
+		EnhancedInputComponent->BindAction(UpdateTestAction, ETriggerEvent::Triggered, this, &ABvC_Character::RequestUpdateTest);
 	}
 }
-
 
 void ABvC_Character::Move(const FInputActionValue& Value)
 {
@@ -99,6 +101,14 @@ void ABvC_Character::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void ABvC_Character::RequestUpdateTest()
+{
+	ABvC_BaseGameMode* BvCGameMode = Cast<ABvC_BaseGameMode>(GetWorld()->GetAuthGameMode());
+	if(!IsValid(BvCGameMode)) return;
+
+	BvCGameMode->UpdateTestTable();
 }
 
 void ABvC_Character::SetHasRifle(bool bNewHasRifle)

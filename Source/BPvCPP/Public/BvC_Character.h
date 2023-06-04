@@ -39,6 +39,10 @@ class ABvC_Character : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
 
+	/** UpdateTests Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	class UInputAction* UpdateTestAction;
+
 	
 public:
 	ABvC_Character();
@@ -70,6 +74,8 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	void RequestUpdateTest();
 
 protected:
 	// APawn interface

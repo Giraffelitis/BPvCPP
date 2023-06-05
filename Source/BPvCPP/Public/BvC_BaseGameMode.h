@@ -8,7 +8,7 @@
 #include "BvC_BaseGameMode.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRequestResponse, FString, InResponse);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUpdateTestsTable);
+DECLARE_MULTICAST_DELEGATE(FOnDataTableUpdated);
 
 class UDataTable;
 
@@ -21,10 +21,11 @@ public:
 	ABvC_BaseGameMode();
 	
 	FOnRequestResponse OnResponseDelegate;
-	FOnUpdateTestsTable UpdateTestsTable;
+	FOnDataTableUpdated OnDataTableUpdated;
 	FString ResponseString;
 
 	UDataTable* GetTestTable() { return TestTable; }
+	
 	void SetTestTable(UDataTable* InVal) { TestTable = InVal; }
 	void UpdateTestTable();
 	
@@ -32,11 +33,11 @@ public:
 	UDataTable* TestTable;
 
 protected:
-	virtual void OnPostLogin(AController* NewPlayer) override;
 	void RetrieveTestTableData();
 
 private:
-
+	//Gets URL for Google Sheets Location
+	FString GetURL();
 	void ProcessResponse(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
 	bool ResponseIsValid(FHttpResponsePtr Response, bool bWasSuccessful);
 	

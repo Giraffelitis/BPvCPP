@@ -13,50 +13,50 @@ ABvC_BaseGameMode::ABvC_BaseGameMode()
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 
 	Http = &FHttpModule::Get();
-	ApiBaseUrl = TEXT("https://docs.google.com/spreadsheets/d/");
-	DocID = TEXT("1FMx0AtfPwXPzlOdKIgYyFYh62jZGZWYV1viUZpTwNLc");
-
-	// https://docs.google.com/spreadsheets/d/1FMx0AtfPwXPzlOdKIgYyFYh62jZGZWYV1viUZpTwNLc/edit?usp=sharing
 	
-	//Gets the DT Blueprint
+	//Gets the DT Blueprint and sets it 
 	static ConstructorHelpers::FObjectFinder<UDataTable>
 	TestTable_BP(TEXT("DataTable'/Game/TestingHub/Data/DT_PerformanceTestList'"));
-
 	SetTestTable(TestTable_BP.Object);
-	ResponseString = "None";
-}
-
-void ABvC_BaseGameMode::OnPostLogin(AController* NewPlayer)
-{
-	Super::OnPostLogin(NewPlayer);
 	
-	UpdateTestTable();
+	ResponseString = "None";
 }
 
 void ABvC_BaseGameMode::UpdateTestTable()
 {
+	//Call Http request 
 	RetrieveTestTableData();
-//	TestTable->EmptyTable();
-	
+
+	// Set the Row Structure for the Data table
 	FPerformanceTestList Row;
 
-	TArray<FString> stringArray ;
-	ResponseString.ParseIntoArray(stringArray, TEXT("\r\n"), false);
-	
-	for (int i = 1; i < stringArray.Num(); i++)
+	//Create Row Array and parse Response String into it
+	TArray<FString> RowArray ;
+	ResponseString.ParseIntoArray(RowArray, TEXT("\r\n"), false);
+
+	// Loop through each Element of RowArray and Parse into a TempArray
+	for (int i = 1; i < RowArray.Num(); i++)
 	{
-		if (stringArray.Num() == 0){continue;}
-		FString LineLabel = stringArray[0];
+		//Recreate Temp array for each iteration
+		TArray<FString> TempArray;
+		RowArray[i].ParseIntoArray(TempArray, TEXT(","));
+
+		//Check element to make sure its the first element
+		if (TempArray.Num() == 0){continue;}
+		FString LineLabel = TempArray[0];
 		if ((LineLabel.Len() == 0)  || LineLabel.StartsWith("\";") || LineLabel.StartsWith(";"))
 		{
 			continue;	// Skip comments or lines with no label
 		}
-		Row.TestingMethod = FText::FromString(TEXT("method"));//stringArray[1];
-		Row.NumOfTestIterations = FCString::Atoi(*stringArray[2]);
 
-		// add the row to the table
-		TestTable->AddRow(FName(*stringArray[i]), Row);
+		//Use elements from TempArray and fill into proper Struct fields
+		Row.TestingMethod = FText::FromString(*TempArray[1]);
+		Row.NumOfTestIterations = FCString::Atoi(*TempArray[2]);
+
+		// Add the Row to the table
+		TestTable->AddRow(FName(*TempArray[0]), Row);		
 	}
+	OnDataTableUpdated.Broadcast();
 }
 
 void ABvC_BaseGameMode::RetrieveTestTableData()
@@ -67,12 +67,9 @@ void ABvC_BaseGameMode::RetrieveTestTableData()
 
 	//Bind request response
 	Request->OnProcessRequestComplete().BindUObject(this, &ThisClass::ProcessResponse);
-
-	// Sets document ID and adds request for csv format 
-	Subroute = FString::Printf(TEXT("%s/export?format=csv"), *DocID);
 	
 	// Set Request URL
-	Request->SetURL(ApiBaseUrl + Subroute);
+	Request->SetURL(GetURL());
 
 	// This is where we set the HTTP method (GET, POST, etc)
 	Request->SetVerb("GET");
@@ -86,14 +83,33 @@ void ABvC_BaseGameMode::RetrieveTestTableData()
 	Request->ProcessRequest();
 }
 
+FString ABvC_BaseGameMode::GetURL()
+{
+	//Default GoogleSheet Url
+	ApiBaseUrl = TEXT("https://docs.google.com/spreadsheets/d/");
+	// This is where you need to change the DocID to get it to work with a different google sheet.
+	// It needs to be shared as public for this to work 
+	DocID = TEXT("1FMx0AtfPwXPzlOdKIgYyFYh62jZGZWYV1viUZpTwNLc"); 
+	// This sets the Google Sheet to be exported into a csv
+	Subroute = TEXT("/export?format=csv");
+	//Return full URL
+	return ApiBaseUrl + DocID + Subroute;
+}
+
 void ABvC_BaseGameMode::ProcessResponse(FHttpRequestPtr InRequest, FHttpResponsePtr InResponse, bool bWasSuccessful)
 {
-	if (!ResponseIsValid(InResponse, bWasSuccessful)) return;
+	//Checks is response was successful
+	if (!ResponseIsValid(InResponse, bWasSuccessful))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HTTP Request Failed"))
+		return;
+	}
 
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *InResponse->GetContentAsString())
+	//Store Response as string
 	ResponseString = *InResponse->GetContentAsString();
-	
-	OnResponseDelegate.Broadcast(InResponse->GetContentAsString());
+
+	//Delegate verbiage if needed to be used somewhere else 
+	//OnResponseDelegate.Broadcast(InResponse->GetContentAsString());
 }
 
 bool ABvC_BaseGameMode::ResponseIsValid(FHttpResponsePtr InResponse, bool bWasSuccessful)
@@ -103,5 +119,4 @@ bool ABvC_BaseGameMode::ResponseIsValid(FHttpResponsePtr InResponse, bool bWasSu
 	
 	UE_LOG(LogTemp, Error, TEXT("Http Response returned error code: %d"), InResponse->GetResponseCode());
 	return false;
-	
 }

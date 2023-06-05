@@ -41,6 +41,8 @@ protected:
 	UPROPERTY()
 	ABvC_BaseGameMode* BvCGameMode;
 
+	FTimerHandle RequestDataDelayTimerHandle;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "BvC")
 	FName TestID;
 	UPROPERTY(BlueprintReadOnly, Category = "BvC")
@@ -59,21 +61,40 @@ protected:
 	FText ElapsedTimeText;
 	UPROPERTY(BlueprintReadOnly, Category = "BvC")
 	FText TotalCalculationsText;
+	UPROPERTY(BlueprintReadWrite, Category = "BvC")
+	bool bSwapped;
+	UPROPERTY(BlueprintReadWrite, Category = "BvC")
+	TArray<int> IntArray;
 	
 	// Initial test loops for simple addition calculation
+	//Starting loop for += using the BP version of addition
 	UFUNCTION(BlueprintCallable)
 	void StartTestIterations(int InLastIndex);
+	//Second loop for += using the BP version of addition
 	UFUNCTION(BlueprintCallable)
-	void StartSecondLoop(int InLastIndex);	
+	void StartSecondLoop(int InLastIndex);
+	//Starting loop for using the increment version of addition
 	UFUNCTION(BlueprintCallable)
 	void StartTestIterationsPlusPlus(int InLastIndex);
+	//Second loop for using the increment version of addition
 	UFUNCTION(BlueprintCallable)
 	void StartSecondLoopPlusPlus(int InLastIndex);
-	
+	//Starts Outer loop for bubble sort function
+	UFUNCTION(BlueprintCallable)
+	void StartBubbleSortOuter(int InLastIndex);
+	//Starts inner loop for bubble sort function
+	UFUNCTION(BlueprintCallable)
+	void StartBubbleSortInner();
+	//Prints sorted array to log and mixes it up for next test
+	UFUNCTION(BlueprintCallable)
+	void PrintBubbleSortArray();
+	//Sets performance test start time
 	UFUNCTION(BlueprintCallable)
 	void SetStartTime();
+	//Calculates the duration of the performance test
 	UFUNCTION(BlueprintCallable)
 	void CalculateElapsedTime();
+	//Collect results and update TextRenderComponents
 	UFUNCTION(BlueprintCallable)
 	void CollectResults();
 	UFUNCTION(BlueprintCallable)
@@ -82,5 +103,6 @@ protected:
 private:
 	UPROPERTY()
 	UDataTable* TestTable;
+	
 	
 };

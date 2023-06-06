@@ -48,7 +48,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BvC")
 	int NumOfIterations;
 	UPROPERTY(BlueprintReadWrite, Category = "BvC")
-	int NumOfCalculations;
+	int NumOfBPCalcs;
+	UPROPERTY()
+	uint64 NumOfCalculations;
 	UPROPERTY()
 	double StartTime;
 	UPROPERTY()

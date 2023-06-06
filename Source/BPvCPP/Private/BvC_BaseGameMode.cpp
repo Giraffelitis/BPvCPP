@@ -5,6 +5,7 @@
 #include "Engine/DataTable.h"
 #include "UObject/ConstructorHelpers.h"
 
+
 ABvC_BaseGameMode::ABvC_BaseGameMode()
 	: Super()
 {
@@ -58,7 +59,6 @@ void ABvC_BaseGameMode::UpdateTestTable()
 	}
 	OnDataTableUpdated.Broadcast();
 }
-
 void ABvC_BaseGameMode::RetrieveTestTableData()
 {
 	// Create an http request
@@ -68,7 +68,7 @@ void ABvC_BaseGameMode::RetrieveTestTableData()
 	//Bind request response
 	Request->OnProcessRequestComplete().BindUObject(this, &ThisClass::ProcessResponse);
 	
-	// Set Request URL
+	// Set Request URL string
 	Request->SetURL(GetURL());
 
 	// This is where we set the HTTP method (GET, POST, etc)

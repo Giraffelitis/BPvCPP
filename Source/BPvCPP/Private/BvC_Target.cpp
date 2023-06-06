@@ -53,6 +53,9 @@ void ABvC_Target::SetTestInfoText()
 
 void ABvC_Target::SetStartTime()
 {
+	NumOfBPCalcs = 0;
+	NumOfCalculations = 0;
+	
 	StartTime = FGenericPlatformTime::ToMilliseconds64(FPlatformTime::Cycles64());
 }
 
@@ -63,6 +66,11 @@ void ABvC_Target::CalculateElapsedTime()
 
 void ABvC_Target::CollectResults()
 {
+	if (NumOfBPCalcs > NumOfCalculations)
+	{
+		NumOfCalculations = NumOfBPCalcs;
+	}
+	
 	TotalCalculationsText = FText::AsNumber(NumOfCalculations);
 	CalculationsTextRender->SetText(TotalCalculationsText);
 

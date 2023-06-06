@@ -92,7 +92,7 @@ void ABvC_Target::CollectResults()
 		
 	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC TestID: %s"), *TestID.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC Number of Planned Iterations: %d"), NumOfIterations);
-	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC Total Number of Calculations: %d"), NumOfCalculations);
+	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC Total Number of Calculations: %llu"), NumOfCalculations);
 	UE_LOG(LogTemp, Warning, TEXT("@@@ BvC Elapsed Time: %f"), TimeElapsed);
 }
 

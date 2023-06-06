@@ -29,15 +29,24 @@ ABvC_Target::ABvC_Target()
 	TestID = "None";
 }
 
+
+
 void ABvC_Target::BeginPlay()
 {
 	Super::BeginPlay();
 
 	BvCGameMode = Cast<ABvC_BaseGameMode>(GetWorld()->GetAuthGameMode());
 	if(!IsValid(BvCGameMode)) return;
-
-	BvCGameMode->OnDataTableUpdated.AddUObject(this,&ThisClass::SetTestInfoText);
+	BvCGameMode->OnDataTableUpdated.AddUObject(this,&ThisClass::UpdateTestInfoText);
+	SetTestInfoText();
+	
 	IntArray = {64, 34, 72, 25, 18, 12, 22, 11, 90, 3, 47, 53, 13, 24, 99, 2, 16, 39, 9, 42, 57, 74, 63, 85, 6,};
+}
+
+void ABvC_Target::UpdateTestInfoText()
+{
+	TestTable = BvCGameMode->GetTestTable();
+	SetTestInfoText();
 }
 
 void ABvC_Target::SetTestInfoText()

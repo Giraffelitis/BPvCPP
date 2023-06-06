@@ -19,6 +19,7 @@ public:
 	// Sets default values for this actor's properties
 	ABvC_Target();
 
+	void UpdateTestInfoText();
 	void SetTestInfoText();	
 
 protected:

@@ -4,10 +4,10 @@ In the inital video we try to share the shock we received when running the first
 We want to present and perform the tests in as unbiased a manner as possible and get as close as we can to comparing apples to apples to preserve the integrity of the tests.
 
 <h3>Goals:</h3>
-1- Provide everyone interested with a platform to come to their own conclusions about when and where to use Blueprints and when it is better to use C++.
-2- Learn and develop an understanding of when it is beneficial to use C++ and when the use Blueprints is beneficial.
-3- Understand better the best practices for coding and improve our code to be more efficient.
-4- Take the knowledge of the internet on things we dont understand, and prove if it is true or not, so we can truly understand for ourselves.
+1- Provide everyone interested with a platform to come to their own conclusions about when and where to use Blueprints and when it is better to use C++.<br>
+2- Learn and develop an understanding of when it is beneficial to use C++ and when the use Blueprints is beneficial.<br>
+3- Understand better the best practices for coding and improve our code to be more efficient.<br>
+4- Take the knowledge of the internet on things we dont understand, and prove if it is true or not, so we can truly understand for ourselves.<br>
 
 <h3>What we are not trying to do:</h3>
 We are not trying to prove C++ is the superior format. While it is much faster in the tests we have performed, there are a great many benefits to using Blureprints.

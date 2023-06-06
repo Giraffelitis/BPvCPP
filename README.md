@@ -13,9 +13,9 @@ We want to present and perform the tests in as unbiased a manner as possible and
 We are not trying to prove C++ is the superior format. While it is much faster in the tests we have performed, there are a great many benefits to using Blureprints.
 UI for instance is a lot easier to build, setup and use while within the blueprint environment. One off tasks. Templating, testing, protoyping, learning, and experimenting,
 are all great uses for Blueprints. Indie games, feature samples,  and demo projects are a great fit for blueprints as well.
-
-
-
+<br>
+<br>
+<br>
 This repo is going to be updated regularly while we are working through different tests and enounter different problems along the way. 
 So the code in the first video may be different than the code you see from the repo as download it for yourself. This is due to use changing and methods and trying to get more 
 information out of the build than we were previously. We will try to be as accurate and concise with the commits and explain what we change but no guarantees. 
